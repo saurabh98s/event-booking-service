@@ -71,5 +71,20 @@ func (eh *eventServiceHandler) findEventHandler(w http.ResponseWriter, r *http.R
 	w.Header().Set("Content-Type", "application/json;charset=utf8")
 	json.NewEncoder(w).Encode(&event)
 }
-func (eh *eventServiceHandler) allEventHandler(w http.ResponseWriter, r *http.Request) {}
+func (eh *eventServiceHandler) allEventHandler(w http.ResponseWriter, r *http.Request) {
+
+	events, err := eh.dbhandler.FindAllAvailableEvents()
+	if err != nil {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, "{error: Error occured while trying to find all available events %s}", err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json;charset=utf8")
+	err = json.NewEncoder(w).Encode(&events)
+	if err != nil {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, "{error: Error occured while trying encode events to JSON %s}", err)
+	}
+
+}
 func (eh *eventServiceHandler) newEventHandler(w http.ResponseWriter, r *http.Request) {}

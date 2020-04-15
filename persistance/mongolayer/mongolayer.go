@@ -91,3 +91,11 @@ func (mgoLayer *MongoDBLayer) FindAllAvailableEvents() ([]persistance.Event, err
 	err := s.DB(DB).C(EVENTS).Find(nil).All(&events)
 	return events, err
 }
+
+func (mgoLayer *MongoDBLayer) FindEvent(id []byte) (persistance.Event, error) {
+	s := mgoLayer.getFreshSession()
+	defer s.Close()
+	e := persistance.Event{}
+	err := s.DB(DB).C(EVENTS).FindId(bson.ObjectId(id)).One(&e)
+	return e, err
+}
