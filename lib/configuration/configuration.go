@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/cloud-native/persistance/dblayer"
+	"github.com/cloud-native/lib/persistance/dblayer"
 )
 
 var (

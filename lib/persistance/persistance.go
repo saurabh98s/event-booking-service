@@ -1,6 +1,5 @@
 package persistance
 
-
 type DatabaseHandler interface {
 	AddEvent(Event) ([]byte, error)
 

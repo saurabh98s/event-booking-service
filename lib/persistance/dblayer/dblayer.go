@@ -1,9 +1,9 @@
 package dblayer
 
 import (
-	"github.com/cloud-native/persistance"
+	"github.com/cloud-native/lib/persistance"
 	// . "github.com/cloud-native/persistance"
-	"github.com/cloud-native/persistance/mongolayer"
+	mongolayer "github.com/cloud-native/lib/persistance/mongolayer"
 )
 
 type DBTYPE string
