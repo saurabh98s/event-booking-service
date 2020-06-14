@@ -1,13 +1,13 @@
 package rest
 
 import (
-	"github.com/geeks/cloud-native/lib/persistance"
 	"net/http"
 
+	"github.com/cloud-native/lib/persistance"
 	"github.com/gorilla/mux"
 )
 
-func ServeAPI(endpoint string, dbHandler persistance.DatabaseHandler) error {
+func ServeAPI(endpoint string, databasehandler persistance.DatabaseHandler) error {
 	handler := &eventServiceHandler{}
 	router := mux.NewRouter()
 	/* here now we will create an api interface

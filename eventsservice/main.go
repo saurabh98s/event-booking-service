@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/geeks/cloud-native/configuration"
+	"github.com/cloud-native/lib/configuration"
 
-	"github.com/geeks/cloud-native/dblayer"
+	"github.com/cloud-native/lib/persistance/dblayer"
 
-	"github.com/geeks/cloud-native/rest"
+	"github.com/cloud-native/eventsservice/rest"
 )
 
 func main() {
