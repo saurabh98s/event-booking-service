@@ -1,7 +1,7 @@
 package persistance
 
 import (
-	"persistance"
+	"github.com/geeks/cloud-native/persistance"
 
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
