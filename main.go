@@ -1,19 +1,15 @@
 package main
 
 import (
+	"cloud-native/configuration"
+	"cloud-native/persistence/dblayer"
+	"cloud-native/rest"
 	"flag"
 	"fmt"
 	"log"
-
-	"github.com/cloud-native/lib/configuration"
-
-	"github.com/cloud-native/lib/persistance/dblayer"
-
-	"github.com/cloud-native/eventsservice/rest"
 )
 
 func main() {
-
 	confPath := flag.String("conf", `.\configuration\config.json`, "flag to set the path to the configuration json file")
 	flag.Parse()
 	//extract configuration
