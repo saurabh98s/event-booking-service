@@ -2,8 +2,11 @@ package main
 
 import(
 	"flag"
+	"fmt"
+	"github.com/cloud-native/eventsservice/rest"
+	"github.com/cloud-native/lib/configuration"
+	"github.com/cloud-native/lib/persistance/dblayer"
 	"log"
-	"src/lib/configuration"
 )
 
 func main() {

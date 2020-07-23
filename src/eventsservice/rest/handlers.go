@@ -1,5 +1,13 @@
 package rest
 
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/gorilla/mux"
+	"net/http"
+	"strings"
+)
+
 type eventServiceHandler struct {
 
 }
