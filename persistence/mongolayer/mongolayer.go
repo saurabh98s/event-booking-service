@@ -27,6 +27,8 @@ func NewMongoDBLayer(connection string) (persistence.DatabaseHandler,error) {
 func (mgoLayer *MongoDBLayer) AddEvent (e persistence.Event) ( persistence.Event,error){
 	s:=mgoLayer.getFreshSession()
 	defer s.Close()
+	e.ID=bson.NewObjectId()
+	e.Location.ID=bson.NewObjectId()
 	err:=s.DB(DB).C(EVENTS).Insert(e)
 	if err != nil {
 		return e,err
