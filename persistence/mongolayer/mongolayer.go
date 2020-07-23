@@ -16,6 +16,7 @@ type MongoDBLayer struct {
 	session *mgo.Session
 }
 
+//NewMongoDBLayer creates a new layer for the mongolayer
 func NewMongoDBLayer(connection string) (persistence.DatabaseHandler,error) {
 	s,err:=mgo.Dial(connection)
 	return &MongoDBLayer{
