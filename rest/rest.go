@@ -8,11 +8,11 @@ import (
 )
 
 func ServeAPI(endpoint string,databasehandler persistence.DatabaseHandler) error {
-	handler:=NewEventHandler(databasehandler)
+	handler := handlers.NewEventHandler(databasehandler)
 	r := mux.NewRouter()
-	eventsRouter:=r.PathPrefix("/events").Subrouter()
-	eventsRouter.Methods(http.MethodGet).Path("/{SearchCriteria}/{search}").HandlerFunc(handlers.)
-	eventsRouter.Methods(http.MethodGet).Path("").HandlerFunc(handlers.AllEventHandler)
-	eventsRouter.Methods(http.MethodPost).Path("").HandlerFunc(handlers.NewEventHandler)
-	return http.ListenAndServe(":8181",r)
+	eventsrouter := r.PathPrefix("/events").Subrouter()
+	eventsrouter.Methods("GET").Path("/{SearchCriteria}/{search}").HandlerFunc(handler.FindEventHandler)
+	eventsrouter.Methods("GET").Path("").HandlerFunc(handler.AllEventHandler)
+	eventsrouter.Methods("POST").Path("").HandlerFunc(handler.NewEventHandler)
+	return http.ListenAndServe(endpoint, r)
 }

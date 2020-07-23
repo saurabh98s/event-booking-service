@@ -1,6 +1,9 @@
 package dblayer
 
-import "cloud-native/persistence"
+import (
+	"cloud-native/persistence"
+	"cloud-native/persistence/mongolayer"
+)
 
 type DBTYPE string
 
@@ -13,7 +16,7 @@ const (
 func NewPersistenceLayer(options DBTYPE,connection string) (persistence.DatabaseHandler,error) {
 	switch options {
 	case MONGODB:
-		//return mongo
+		return mongolayer.NewMongoDBLayer(connection)
 	}
 	return nil, nil
 }

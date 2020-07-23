@@ -2,19 +2,21 @@ package handlers
 
 import (
 	"cloud-native/persistence"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"log"
 	"net/http"
+	"strings"
 )
 
 type eventServiceHandler struct {
 	dbhandler persistence.DatabaseHandler
 }
 
-func NewEventHandler(databasehandler persistence.DatabaseHandler) *eventServiceHandler {
+func NewEventHandler(databaseHandler persistence.DatabaseHandler) *eventServiceHandler {
 	return &eventServiceHandler{
-		dbhandler: databasehandler,
+		dbhandler: databaseHandler,
 	}
 }
 
@@ -37,11 +39,54 @@ func (eh *eventServiceHandler) FindEventHandler(w http.ResponseWriter,r *http.Re
 		return
 
 	}
+
+	var event persistence.Event
+	var err error
+	switch strings.ToLower(criteria) {
+	case "name":
+		event, err = eh.dbhandler.FindEventByName(searchKey)
+	case "id":
+		id, err := hex.DecodeString(searchKey)
+		if err == nil {
+			event, err = eh.dbhandler.FindEvent(id)
+		}
+	}
+	if err != nil {
+		fmt.Fprintf(w, `{"error": "%s"}`, err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json;charset=utf8")
+	json.NewEncoder(w).Encode(&event)
+
 }
 
-func (eh eventServiceHandler) AllEventHandler(w http.ResponseWriter,r *http.Request) {
-	log.Println("All event Handler")
+func (eh *eventServiceHandler) AllEventHandler(w http.ResponseWriter,r *http.Request) {
+	events, err := eh.dbhandler.FindAllAvailableEvents()
+	if err != nil || events ==nil {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, `{"error": "Error occured while trying to find all available events %s"}`, err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json;charset=utf8")
+	err = json.NewEncoder(w).Encode(&events)
+	if err != nil {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, `{"error": "Error occured while trying encode events to JSON %s"}`, err)
+	}
 }
-func (eh eventServiceHandler) NewEventHandler(w http.ResponseWriter,r *http.Request) {
-	log.Println("New event Handler")
+func (eh *eventServiceHandler) NewEventHandler(w http.ResponseWriter,r *http.Request) {
+	event := persistence.Event{}
+	err := json.NewDecoder(r.Body).Decode(&event)
+	if nil != err {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, `{"error": "error occured while decoding event data %s"}`, err)
+		return
+	}
+	id, err := eh.dbhandler.AddEvent(event)
+	if nil != err {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, `{"error": "error occured while persisting event %d %s"}`, id, err)
+		return
+	}
+	fmt.Fprintf(w, `{"id":%d}`, id)
 }
