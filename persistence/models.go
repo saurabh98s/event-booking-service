@@ -1,5 +1,10 @@
 package persistence
 
+import (
+	"fmt"
+	"github.com/globalsign/mgo/bson"
+)
+
 type User struct {
 	ID       bson.ObjectId `bson:"_id"`
 	First    string
