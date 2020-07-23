@@ -20,20 +20,20 @@ func NewEventHandler(databaseHandler persistence.DatabaseHandler) *eventServiceH
 	}
 }
 
-func (eh *eventServiceHandler) FindEventHandler(w http.ResponseWriter,r *http.Request) {
-		vars:=mux.Vars(r)
-		criteria,ok:=vars["SearchCriteria"]
+func (eh *eventServiceHandler) FindEventHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	criteria, ok := vars["SearchCriteria"]
 	if !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w,`{"error":"No search criteria found, you can either 
+		fmt.Fprintf(w, `{"error":"No search criteria found, you can either 
 								search by id via /id/4 
 								to search by name via /name/coldplayconcert"`)
 		return
 	}
-	searchKey,ok:=vars["search"]
+	searchKey, ok := vars["search"]
 	if !ok {
 		w.WriteHeader(400)
-		fmt.Fprintf(w,`{"error":"No search criteria found, you can either 
+		fmt.Fprintf(w, `{"error":"No search criteria found, you can either 
 								search by id via /id/4 
 								to search by name via /name/coldplayconcert"`)
 		return
@@ -60,9 +60,9 @@ func (eh *eventServiceHandler) FindEventHandler(w http.ResponseWriter,r *http.Re
 
 }
 
-func (eh *eventServiceHandler) AllEventHandler(w http.ResponseWriter,r *http.Request) {
+func (eh *eventServiceHandler) AllEventHandler(w http.ResponseWriter, r *http.Request) {
 	events, err := eh.dbhandler.FindAllAvailableEvents()
-	if err != nil || events ==nil {
+	if err != nil || events == nil {
 		w.WriteHeader(500)
 		fmt.Fprintf(w, `{"error": "Error occured while trying to find all available events %s"}`, err)
 		return
@@ -74,7 +74,7 @@ func (eh *eventServiceHandler) AllEventHandler(w http.ResponseWriter,r *http.Req
 		fmt.Fprintf(w, `{"error": "Error occured while trying encode events to JSON %s"}`, err)
 	}
 }
-func (eh *eventServiceHandler) NewEventHandler(w http.ResponseWriter,r *http.Request) {
+func (eh *eventServiceHandler) NewEventHandler(w http.ResponseWriter, r *http.Request) {
 	event := persistence.Event{}
 	err := json.NewDecoder(r.Body).Decode(&event)
 	if err != nil {

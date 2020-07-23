@@ -8,10 +8,11 @@ import (
 )
 
 var (
-	DBTypeDefault       = dblayer.DBTYPE("mongodb")
-	DBConnectionDefault = "mongodb://127.0.0.1"
-	RestfulEndPointPDefault    = "localhost:8181"
+	DBTypeDefault           = dblayer.DBTYPE("mongodb")
+	DBConnectionDefault     = "mongodb://127.0.0.1"
+	RestfulEndPointPDefault = "localhost:8181"
 )
+
 type ServiceConfig struct {
 	Databasetype    dblayer.DBTYPE `json:"databasetype"`
 	DBConnection    string         `json:"dbconnection"`

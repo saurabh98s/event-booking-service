@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func ServeAPI(endpoint string,databasehandler persistence.DatabaseHandler) error {
+func ServeAPI(endpoint string, databasehandler persistence.DatabaseHandler) error {
 	handler := handlers.NewEventHandler(databasehandler)
 	r := mux.NewRouter()
 	eventsrouter := r.PathPrefix("/events").Subrouter()
