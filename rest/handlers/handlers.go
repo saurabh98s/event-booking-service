@@ -6,16 +6,18 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 type eventServiceHandler struct {
 	dbhandler persistence.DatabaseHandler
 }
 
+// NewEventHandler creates a new event service
 func NewEventHandler(databaseHandler persistence.DatabaseHandler) *eventServiceHandler {
 	return &eventServiceHandler{
 		dbhandler: databaseHandler,
@@ -81,7 +83,7 @@ func (eh *eventServiceHandler) AllEventHandler(w http.ResponseWriter, r *http.Re
 func (eh *eventServiceHandler) NewEventHandler(w http.ResponseWriter, r *http.Request) {
 	event := persistence.Event{}
 	err := json.NewDecoder(r.Body).Decode(&event)
-	logger.Log.WithTime(time.Now().Local()).Info("[DEBUG] Adding New Event to DB" ,event.Name)
+	logger.Log.WithTime(time.Now().Local()).Info("[DEBUG] Adding New Event to DB", event.Name)
 	if err != nil {
 		w.WriteHeader(500)
 		fmt.Fprintf(w, `{"error": "error occured while decoding event data %s"}`, err)
@@ -93,6 +95,6 @@ func (eh *eventServiceHandler) NewEventHandler(w http.ResponseWriter, r *http.Re
 		fmt.Fprintf(w, `{"error": "error occured while persisting event %s:  %s"}`, result.ID.Hex(), err)
 		return
 	}
-	fmt.Fprintf(w, `{"id":%d}`, result.ID.Hex())
-	logger.Log.Info("[DEBUG] Added event: ",result.Name)
+	fmt.Fprintf(w, `{"id":%s}`, result.ID.Hex())
+	logger.Log.Info("[DEBUG] Added event: ", result.Name)
 }

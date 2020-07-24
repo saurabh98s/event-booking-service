@@ -3,10 +3,12 @@ package rest
 import (
 	"cloud-native/persistence"
 	"cloud-native/rest/handlers"
-	"github.com/gorilla/mux"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
+// ServeAPI handles the endpoints and db type to serve
 func ServeAPI(endpoint string, databasehandler persistence.DatabaseHandler) error {
 	handler := handlers.NewEventHandler(databasehandler)
 	r := mux.NewRouter()
