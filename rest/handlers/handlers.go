@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"cloud-native/logger"
 	"cloud-native/persistence"
 	"encoding/hex"
 	"encoding/json"
@@ -8,6 +9,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type eventServiceHandler struct {
@@ -28,6 +30,7 @@ func (eh *eventServiceHandler) FindEventHandler(w http.ResponseWriter, r *http.R
 		fmt.Fprintf(w, `{"error":"No search criteria found, you can either 
 								search by id via /id/4 
 								to search by name via /name/coldplayconcert"`)
+		logger.Log.Error("No search criteria found, you can either search by id via /id/4to search by name via /name/coldplayconcert")
 		return
 	}
 	searchKey, ok := vars["search"]
@@ -36,6 +39,7 @@ func (eh *eventServiceHandler) FindEventHandler(w http.ResponseWriter, r *http.R
 		fmt.Fprintf(w, `{"error":"No search criteria found, you can either 
 								search by id via /id/4 
 								to search by name via /name/coldplayconcert"`)
+		logger.Log.Error("No search criteria found, you can either search by id via /id/4to search by name via /name/coldplayconcert")
 		return
 
 	}
@@ -77,16 +81,18 @@ func (eh *eventServiceHandler) AllEventHandler(w http.ResponseWriter, r *http.Re
 func (eh *eventServiceHandler) NewEventHandler(w http.ResponseWriter, r *http.Request) {
 	event := persistence.Event{}
 	err := json.NewDecoder(r.Body).Decode(&event)
+	logger.Log.WithTime(time.Now().Local()).Info("[DEBUG] Adding New Event to DB" ,event.Name)
 	if err != nil {
 		w.WriteHeader(500)
 		fmt.Fprintf(w, `{"error": "error occured while decoding event data %s"}`, err)
 		return
 	}
-	id, err := eh.dbhandler.AddEvent(event)
+	result, err := eh.dbhandler.AddEvent(event)
 	if err != nil {
 		w.WriteHeader(500)
-		fmt.Fprintf(w, `{"error": "error occured while persisting event %d %s"}`, id, err)
+		fmt.Fprintf(w, `{"error": "error occured while persisting event %s:  %s"}`, result.ID.Hex(), err)
 		return
 	}
-	fmt.Fprintf(w, `{"id":%d}`, id)
+	fmt.Fprintf(w, `{"id":%d}`, result.ID.Hex())
+	logger.Log.Info("[DEBUG] Added event: ",result.Name)
 }

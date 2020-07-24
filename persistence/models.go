@@ -7,10 +7,10 @@ import (
 
 type User struct {
 	ID       bson.ObjectId `bson:"_id"`
-	First    string
-	Last     string
-	Age      int
-	Bookings []Booking
+	First    string `json:"first"`
+	Last     string `json:"last"`
+	Age      int `json:"age"`
+	Bookings []Booking `json:"bookings"`
 }
 
 func (u *User) String() string {
@@ -18,28 +18,28 @@ func (u *User) String() string {
 }
 
 type Booking struct {
-	Date    int64
-	EventID []byte
-	Seats   int
+	Date    int64 `json:"date"`
+	EventID []byte `json:"event_id"`
+	Seats   int `json:"seats"`
 }
 
 type Event struct {
-	ID        bson.ObjectId `bson:"_id"`
-	Name      string
-	Duration  int
-	StartDate int64
-	EndDate   int64
-	Location  Location
+	ID        bson.ObjectId `json:"id" bson:"_id"`
+	Name      string `json:"name"`
+	Duration  int `json:"duration"`
+	StartDate int64 `json:"start_date"`
+	EndDate   int64 `json:"end_date"`
+	Location  Location `json:"location"`
 }
 
 type Location struct {
-	ID        bson.ObjectId `bson:"_id"`
-	Name      string
-	Address   string
-	Country   string
-	OpenTime  int
-	CloseTime int
-	Halls     []Hall
+	ID        bson.ObjectId `json:"id" bson:"_id"`
+	Name      string `json:"name"`
+	Address   string `json:"address"`
+	Country   string `json:"country"`
+	OpenTime  int `json:"open_time"`
+	CloseTime int `json:"close_time"`
+	Halls     []Hall `json:"halls"`
 }
 
 type Hall struct {

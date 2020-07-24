@@ -11,7 +11,7 @@ const (
 	MONGODB  DBTYPE = "mongodb"
 	DYNAMODB DBTYPE = "dynamodb"
 )
-
+//NewPersistenceLayer returns a new layer of mongo db connection
 func NewPersistenceLayer(options DBTYPE, connection string) (persistence.DatabaseHandler, error) {
 	switch options {
 	case MONGODB:
