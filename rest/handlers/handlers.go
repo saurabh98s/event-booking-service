@@ -17,16 +17,12 @@ type eventServiceHandler struct {
 	dbhandler persistence.DatabaseHandler
 }
 
-// NewEventHandler creates a new event service
-func NewEventHandler(databaseHandler persistence.DatabaseHandler) *eventServiceHandler {
-	return &eventServiceHandler{
-		dbhandler: databaseHandler,
-	}
-}
+
 
 func (eh *eventServiceHandler) FindEventHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	criteria, ok := vars["SearchCriteria"]
+	logger.Log.Info("criteria: ",criteria)
 	if !ok {
 		w.WriteHeader(400)
 		fmt.Fprintf(w, `{"error":"No search criteria found, you can either 
@@ -80,7 +76,7 @@ func (eh *eventServiceHandler) AllEventHandler(w http.ResponseWriter, r *http.Re
 		fmt.Fprintf(w, `{"error": "Error occured while trying encode events to JSON %s"}`, err)
 	}
 }
-func (eh *eventServiceHandler) NewEventHandler(w http.ResponseWriter, r *http.Request) {
+func (eh *eventServiceHandler) AddEventHandler(w http.ResponseWriter, r *http.Request) {
 	event := persistence.Event{}
 	err := json.NewDecoder(r.Body).Decode(&event)
 	logger.Log.WithTime(time.Now().Local()).Info("[DEBUG] Adding New Event to DB", event.Name)
@@ -97,4 +93,12 @@ func (eh *eventServiceHandler) NewEventHandler(w http.ResponseWriter, r *http.Re
 	}
 	fmt.Fprintf(w, `{"id":%s}`, result.ID.Hex())
 	logger.Log.Info("[DEBUG] Added event: ", result.Name)
+}
+
+
+// NewEventHandler creates a new event service
+func NewEventHandler(databaseHandler persistence.DatabaseHandler) *eventServiceHandler {
+	return &eventServiceHandler{
+		dbhandler: databaseHandler,
+	}
 }
