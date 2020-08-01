@@ -22,6 +22,12 @@ func main() {
 		return
 	}
 	logger.Log.Info("[DEBUG] Connected to database")
-	//REST API start
-	log.Fatal(rest.ServeAPI(config.RestfulEndpoint, dbhandler))
+	//RESTful API start
+	httpErrChan, httptlsErrChan := rest.ServeAPI(config.RestfulEndpoint, config.RestfulTLSEndpoint, dbhandler)
+	select {
+	case err := <-httpErrChan:
+		log.Fatal("HTTP Error: ", err)
+	case err := <-httptlsErrChan:
+		log.Fatal("HTTPS Error: ", err)
+	}
 }
