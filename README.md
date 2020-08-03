@@ -1,4 +1,19 @@
 
+## PROTOTYPING:
+![APP DEMO](https://github.com/saurabh98s/Microservices/blob/master/prototyping/Adobe-XD-2020-08-03-14-14-56.gif)
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Sample Json Post request
 
 {
